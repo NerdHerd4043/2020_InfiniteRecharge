@@ -11,16 +11,21 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.RobotConstants;
 
 public class Drivetrain extends SubsystemBase {
   private DifferentialDrive diffDrive;
 
-  private CANSparkMax frontLeftMotor = new CANSparkMax(2, MotorType.kBrushless);;
-  private CANSparkMax frontRightMotor = new CANSparkMax(3, MotorType.kBrushless);
-  private CANSparkMax backLeftMotor = new CANSparkMax(1, MotorType.kBrushless);
-  private CANSparkMax backRightMotor = new CANSparkMax(4, MotorType.kBrushless);
+  private CANSparkMax frontLeftMotor = new CANSparkMax(DriveConstants.frontLeftMotorID, MotorType.kBrushless);
+  private CANSparkMax frontRightMotor = new CANSparkMax(DriveConstants.frontRightMotorID, MotorType.kBrushless);
+  private CANSparkMax backLeftMotor = new CANSparkMax(DriveConstants.backLeftMotorID, MotorType.kBrushless);
+  private CANSparkMax backRightMotor = new CANSparkMax(DriveConstants.backRightMotorID, MotorType.kBrushless);
+
+  private Solenoid shifter = new Solenoid(RobotConstants.PCMID, DriveConstants.shifterID);
 
   /**
    * Creates a new Drivetrain.
@@ -47,7 +52,7 @@ public class Drivetrain extends SubsystemBase {
     diffDrive = new DifferentialDrive(frontLeftMotor, frontRightMotor);
   }
 
-    /**
+  /**
    * Drives the robot using arcade controls.
    *
    * @param fwd the commanded forward movement
@@ -56,6 +61,16 @@ public class Drivetrain extends SubsystemBase {
   public void arcadeDrive(double fwd, double rot) {
     diffDrive.arcadeDrive(fwd, rot, true);
   }
+
+  /**
+   * Inverts the current gear
+   */
+  public void shift() { shifter.set(!shifter.get()); }
+
+  /**
+   * @param a the boolean to set the gear
+   */
+  public void shift(boolean a) { shifter.set(a); }
 
   @Override
   public void periodic() {

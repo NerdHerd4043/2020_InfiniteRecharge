@@ -63,6 +63,8 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Feed Forward", kFF);
     SmartDashboard.putNumber("Max Output", maxOutput);
     SmartDashboard.putNumber("Min Output", minOutput);
+
+    SmartDashboard.putNumber("Set Point", 0);
   }
 
   /**
@@ -104,6 +106,12 @@ public class Shooter extends SubsystemBase {
   public double getFlywheelVelocity() { return encoder.getVelocity(); }
   public double getFlywheelPos() { return encoder.getPosition(); }
 
+  /**
+   * @return the pidController
+   */
+  public CANPIDController getPidController() {
+    return pidController;
+  }
 
   @Override
   public void periodic() {

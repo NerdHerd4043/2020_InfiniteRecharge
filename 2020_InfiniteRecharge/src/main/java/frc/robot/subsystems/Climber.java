@@ -49,6 +49,14 @@ public class Climber extends SubsystemBase {
     winchMotorF.set(-0.5);
   }
 
+  /**
+   * Stop Motor and hold closed during the match
+   */
+  public void climberRest() {
+    climberPiston.set(false);
+    winchMotorF.stopMotor();
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

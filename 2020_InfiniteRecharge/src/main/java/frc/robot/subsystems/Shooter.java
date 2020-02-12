@@ -65,6 +65,8 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Min Output", minOutput);
 
     SmartDashboard.putNumber("Set Point", 0);
+
+    SmartDashboard.putNumber("Flywheel Velocity", getFlywheelVelocity());
   }
 
   /**
@@ -91,6 +93,8 @@ public class Shooter extends SubsystemBase {
     double max = SmartDashboard.getNumber("Max Output", 0);
     double min = SmartDashboard.getNumber("Min Output", 0);
 
+    double vel = SmartDashboard.getNumber("Flywheel Velocity", 0);
+
     // if PID coefficients on SmartDashboard have changed, write new values to controller
     if((p != kP)) { pidController.setP(p); kP = p; }
     if((i != kI)) { pidController.setI(i); kI = i; }
@@ -101,6 +105,8 @@ public class Shooter extends SubsystemBase {
       pidController.setOutputRange(min, max); 
       minOutput = min; maxOutput = max; 
     }
+
+    if((vel != getFlywheelVelocity())){ SmartDashboard.putNumber("Flywheel Velocity", getFlywheelVelocity()); }
   }
 
   public double getFlywheelVelocity() { return encoder.getVelocity(); }

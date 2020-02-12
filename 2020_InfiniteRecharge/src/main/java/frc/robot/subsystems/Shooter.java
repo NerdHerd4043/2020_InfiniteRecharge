@@ -27,7 +27,7 @@ public class Shooter extends SubsystemBase {
   private CANEncoder encoder;
 
   // PID Variables
-  public double kP, kI, kD, kIz, kFF, maxOutput, minOutput, maxRPM;
+  public double kP, kI, kD, kIz, kFF, maxOutput, minOutput, maxRPM, convSpd, liftSpd;
 
   /**
    * Creates a new Shooter.
@@ -65,6 +65,8 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Min Output", minOutput);
 
     SmartDashboard.putNumber("Set Point", 0);
+    SmartDashboard.putNumber("Conveyor Speed", 0.5);
+    SmartDashboard.putNumber("Lifter Speed", 0.5);
 
     SmartDashboard.putNumber("Flywheel Velocity", getFlywheelVelocity());
   }
@@ -72,14 +74,14 @@ public class Shooter extends SubsystemBase {
   /**
    * @param a the power to set the conveyorMotor to
    */
-  public void setConveyorMotor(int a) {
+  public void setConveyorMotor(double a) {
     conveyorMotor.set(a);
   }
 
   /**
    * @param a the power to set the lifterMotor to
    */
-  public void setLifterMotor(int a) {
+  public void setLifterMotor(double a) {
     lifterMotor.set(a);
   }
 
@@ -92,6 +94,9 @@ public class Shooter extends SubsystemBase {
     double ff = SmartDashboard.getNumber("Feed Forward", 0);
     double max = SmartDashboard.getNumber("Max Output", 0);
     double min = SmartDashboard.getNumber("Min Output", 0);
+
+    double conv = SmartDashboard.getNumber("Conveyor Speed", 0);
+    double lift = SmartDashboard.getNumber("Lifter Speed", 0);
 
     double vel = SmartDashboard.getNumber("Flywheel Velocity", 0);
 
@@ -106,11 +111,15 @@ public class Shooter extends SubsystemBase {
       minOutput = min; maxOutput = max; 
     }
 
+    if((convSpd != conv)) { convSpd = conv; }
+    if((liftSpd != lift)) { liftSpd = lift; }
+ 
     if((vel != getFlywheelVelocity())){ SmartDashboard.putNumber("Flywheel Velocity", getFlywheelVelocity()); }
   }
 
   public double getFlywheelVelocity() { return encoder.getVelocity(); }
   public double getFlywheelPos() { return encoder.getPosition(); }
+  public double getLiftSpeed() { return liftSpd; }
 
   /**
    * @return the pidController

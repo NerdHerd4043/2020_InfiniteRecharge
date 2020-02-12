@@ -5,30 +5,22 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
-
-import com.revrobotics.CANPIDController;
-import com.revrobotics.ControlType;
+package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Climber;
 
-public class Shoot extends CommandBase {
-  private Shooter shooter;
-  private CANPIDController pidcontroller;
-
-  private double setPoint;
+public class ClimberUp extends CommandBase {
+  private Climber climber;
 
   /**
-   * Creates a new Shoot.
+   * Creates a new ClimberUp.
    */
-  public Shoot(Shooter shooter) {
-    this.shooter = shooter;
-    this.pidcontroller = this.shooter.getPidController();
-    setPoint = 0;
+  public ClimberUp(Climber climber) {
+    this.climber = climber;
 
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(this.shooter);
+    addRequirements(this.climber);
   }
 
   // Called when the command is initially scheduled.
@@ -39,19 +31,17 @@ public class Shoot extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    pidcontroller.setReference(setPoint, ControlType.kVelocity);
-    shooter.updatePIDValues();
+    climber.climberUp();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    pidcontroller.setReference(0, ControlType.kVelocity);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

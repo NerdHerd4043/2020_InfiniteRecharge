@@ -33,7 +33,7 @@ public class RobotContainer {
   // private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
 
-  XboxController driveStick = new XboxController(0);
+  private static XboxController driveStick = new XboxController(0);
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -57,12 +57,17 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(driveStick, Button.kBack.value).whenPressed(new ClimberUp(climber));
-    new JoystickButton(driveStick, Button.kStart.value).whenPressed(new ClimberDown(climber));
+    new JoystickButton(driveStick, Button.kBack.value).toggleWhenPressed(new ClimberUp(climber));
+    new JoystickButton(driveStick, Button.kStart.value).toggleWhenPressed(new ClimberDown(climber));
 
     new JoystickButton(driveStick, Button.kX.value).whenPressed(new Shoot(shooter));
   }
 
+
+  /**
+   * @return the main driver controller
+   */
+  public static XboxController getDriveStick() { return driveStick; }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

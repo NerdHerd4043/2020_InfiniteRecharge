@@ -11,13 +11,12 @@ import com.revrobotics.CANPIDController;
 import com.revrobotics.ControlType;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.Shooter;
 
 public class Shoot extends CommandBase {
   private Shooter shooter;
   private CANPIDController pidcontroller;
-
-  private double setPoint;
 
   /**
    * Creates a new Shoot.
@@ -25,9 +24,7 @@ public class Shoot extends CommandBase {
   public Shoot(Shooter shooter) {
     this.shooter = shooter;
     this.pidcontroller = this.shooter.getPidController();
-    setPoint = 0;
 
-    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(this.shooter);
   }
 
@@ -39,8 +36,11 @@ public class Shoot extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    pidcontroller.setReference(setPoint, ControlType.kVelocity);
-    shooter.setLifterMotor(shooter.getLiftSpeed());
+    pidcontroller.setReference(shooter.getSetPoint(), ControlType.kVelocity);
+    shooter.setConveyorMotor(shooter.getConveyorSpeed());
+
+    if(RobotContainer.getDriveStick().getAButton()) { shooter.setLifterMotor(shooter.getLiftSpeed()); }
+
     shooter.updatePIDValues();
   }
 

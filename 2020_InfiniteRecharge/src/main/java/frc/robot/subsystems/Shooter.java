@@ -27,7 +27,7 @@ public class Shooter extends SubsystemBase {
   private CANEncoder encoder;
 
   // PID Variables
-  public double kP, kI, kD, kIz, kFF, maxOutput, minOutput, maxRPM, convSpd, liftSpd;
+  public double kP, kI, kD, kIz, kFF, maxOutput, minOutput, maxRPM, convSpd, liftSpd, setPoint;
 
   /**
    * Creates a new Shooter.
@@ -98,6 +98,8 @@ public class Shooter extends SubsystemBase {
     double conv = SmartDashboard.getNumber("Conveyor Speed", 0);
     double lift = SmartDashboard.getNumber("Lifter Speed", 0);
 
+    double dSetPoint = SmartDashboard.getNumber("Set Point", 0);
+
     double vel = SmartDashboard.getNumber("Flywheel Velocity", 0);
 
     // if PID coefficients on SmartDashboard have changed, write new values to controller
@@ -114,12 +116,16 @@ public class Shooter extends SubsystemBase {
     if((convSpd != conv)) { convSpd = conv; }
     if((liftSpd != lift)) { liftSpd = lift; }
  
+    if((dSetPoint != setPoint)) { setPoint = dSetPoint; }
+
     if((vel != getFlywheelVelocity())){ SmartDashboard.putNumber("Flywheel Velocity", getFlywheelVelocity()); }
   }
 
   public double getFlywheelVelocity() { return encoder.getVelocity(); }
   public double getFlywheelPos() { return encoder.getPosition(); }
   public double getLiftSpeed() { return liftSpd; }
+  public double getConveyorSpeed() { return convSpd; }
+  public double getSetPoint() { return setPoint; }
 
   /**
    * @return the pidController

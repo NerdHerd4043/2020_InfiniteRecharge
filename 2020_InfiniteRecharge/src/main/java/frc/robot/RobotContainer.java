@@ -60,7 +60,7 @@ public class RobotContainer {
     new JoystickButton(driveStick, Button.kBack.value).toggleWhenPressed(new ClimberUp(climber));
     new JoystickButton(driveStick, Button.kStart.value).toggleWhenPressed(new ClimberDown(climber));
 
-    new JoystickButton(driveStick, Button.kX.value).whenPressed(new Shoot(shooter));
+    new JoystickButton(driveStick, Button.kX.value).toggleWhenPressed(new Shoot(shooter));
   }
 
 

@@ -20,6 +20,9 @@ public class Climber extends SubsystemBase {
   private WPI_TalonSRX winchMotorB = new WPI_TalonSRX(ClimberConstants.winchMotorBackwardID);
 
   private Solenoid climberPiston = new Solenoid(RobotConstants.PCMID, ClimberConstants.climberSolenoidID);
+
+  private boolean resting = true;
+  private boolean up = true;
   
 
   /**
@@ -39,6 +42,8 @@ public class Climber extends SubsystemBase {
   public void climberUp() {
     climberPiston.set(true);
     winchMotorF.stopMotor();
+    this.setResting(false);
+    this.setUp(true);
   }
 
   /**
@@ -46,7 +51,9 @@ public class Climber extends SubsystemBase {
    */
   public void climberDown() {
     climberPiston.set(false);
-    winchMotorF.set(-0.5);
+    winchMotorF.set(-0.2);
+    this.setResting(false);
+    this.setUp(false);
   }
 
   /**
@@ -55,6 +62,36 @@ public class Climber extends SubsystemBase {
   public void climberRest() {
     climberPiston.set(false);
     winchMotorF.stopMotor();
+    this.setResting(true);
+    this.setUp(false);
+  }
+
+  /**
+   * @param resting the resting to set
+   */
+  private void setResting(boolean resting) {
+    this.resting = resting;
+  }
+
+  /**
+   * @return the resting
+   */
+  public boolean isResting() {
+    return resting;
+  }
+
+  /**
+   * @param up the up to set
+   */
+  private void setUp(boolean up) {
+    this.up = up;
+  }
+
+  /**
+   * @return the up
+   */
+  public boolean isUp() {
+    return up;
   }
 
   @Override

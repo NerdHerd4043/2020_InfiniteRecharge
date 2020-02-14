@@ -26,8 +26,8 @@ public final class Constants {
     }
 
     public static final class ClimberConstants {
-        public static final int winchMotorForwardID = 1;
-        public static final int winchMotorBackwardID = 2;
+        public static final int winchMotorForwardID = 6;
+        public static final int winchMotorBackwardID = 7;
 
         public static final int climberSolenoidID = 2;
     }
@@ -35,8 +35,8 @@ public final class Constants {
     public static final class ShooterConstants {
         public static final int flyWheelMotorID = 5;
 
-        public static final int conveyorMotorID = 3;
-        public static final int lifterMotorID = 4;
+        public static final int conveyorMotorID = 8;
+        public static final int lifterMotorID = 9;
 
     }
 

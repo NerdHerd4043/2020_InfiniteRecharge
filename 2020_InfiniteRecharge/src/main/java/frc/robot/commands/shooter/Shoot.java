@@ -39,15 +39,17 @@ public class Shoot extends CommandBase {
     pidcontroller.setReference(shooter.getSetPoint(), ControlType.kVelocity);
     shooter.setConveyorMotor(shooter.getConveyorSpeed());
 
-    if(RobotContainer.getDriveStick().getAButton()) { shooter.setLifterMotor(shooter.getLiftSpeed()); }
+    if(RobotContainer.getDriveStick().getAButton()) { shooter.setLifterMotor(shooter.getLiftSpeed()); System.out.println("KICKING IT: " + shooter.getLiftSpeed()); } else {shooter.stopKickup();} 
 
-    shooter.updatePIDValues();
+    System.out.println("Vel: " + shooter.getFlywheelVelocity());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    pidcontroller.setReference(0, ControlType.kVelocity);
+      shooter.stopShooterMotor();
+      shooter.setConveyorMotor(0);
+      shooter.setLifterMotor(0);
   }
 
   // Returns true when the command should end.

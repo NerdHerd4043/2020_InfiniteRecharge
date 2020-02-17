@@ -46,6 +46,11 @@ public class Drivetrain extends SubsystemBase {
     frontLeftMotor.setIdleMode(IdleMode.kBrake);
     frontRightMotor.setIdleMode(IdleMode.kBrake);
 
+    backLeftMotor.setClosedLoopRampRate(DriveConstants.closedLoopRampRate);
+    backRightMotor.setClosedLoopRampRate(DriveConstants.closedLoopRampRate);
+    frontLeftMotor.setClosedLoopRampRate(DriveConstants.closedLoopRampRate);
+    frontRightMotor.setClosedLoopRampRate(DriveConstants.closedLoopRampRate);
+
     backLeftMotor.follow(frontLeftMotor);
     backRightMotor.follow(frontRightMotor);
 
@@ -70,7 +75,7 @@ public class Drivetrain extends SubsystemBase {
   /**
    * @param a the boolean to set the gear
    */
-  public void shift(boolean a) { shifter.set(a); }
+  public void shift(boolean a) { shifter.set(!a); }
 
   @Override
   public void periodic() {

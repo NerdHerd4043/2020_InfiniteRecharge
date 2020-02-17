@@ -57,10 +57,13 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(driveStick, Button.kBack.value).toggleWhenPressed(new ClimberUp(climber));
-    new JoystickButton(driveStick, Button.kStart.value).toggleWhenPressed(new ClimberDown(climber));
+    new JoystickButton(driveStick, Button.kBack.value).toggleWhenPressed(new ClimberUp(climber), true);
+    new JoystickButton(driveStick, Button.kStart.value).toggleWhenPressed(new ClimberDown(climber), true);
 
-    new JoystickButton(driveStick, Button.kX.value).toggleWhenPressed(new Shoot(shooter));
+    new JoystickButton(driveStick, Button.kX.value).toggleWhenPressed(new Shoot(shooter), true);
+
+    new JoystickButton(driveStick, Button.kBumperRight.value).whenPressed(new ShiftUp(drivetrain));
+    new JoystickButton(driveStick, Button.kBumperLeft.value).whenPressed(new ShiftDown(drivetrain));
   }
 
 

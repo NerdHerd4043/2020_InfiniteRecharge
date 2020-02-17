@@ -16,8 +16,8 @@ import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.RobotConstants;
 
 public class Climber extends SubsystemBase {
-  private WPI_TalonSRX winchMotorF = new WPI_TalonSRX(ClimberConstants.winchMotorForwardID);  
-  private WPI_TalonSRX winchMotorB = new WPI_TalonSRX(ClimberConstants.winchMotorBackwardID);
+  private WPI_TalonSRX winchMotorF = new WPI_TalonSRX(ClimberConstants.winchMotorTopID);  
+  private WPI_TalonSRX winchMotorB = new WPI_TalonSRX(ClimberConstants.winchMotorBottomID);
 
   private Solenoid climberPiston = new Solenoid(RobotConstants.PCMID, ClimberConstants.climberSolenoidID);
 

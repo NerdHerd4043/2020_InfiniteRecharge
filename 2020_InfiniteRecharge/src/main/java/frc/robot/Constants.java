@@ -23,11 +23,13 @@ public final class Constants {
         public static final int backRightMotorID = 4;
 
         public static final int shifterID = 1;
+
+        public static final double closedLoopRampRate = 0.254;
     }
 
     public static final class ClimberConstants {
-        public static final int winchMotorForwardID = 6;
-        public static final int winchMotorBackwardID = 7;
+        public static final int winchMotorTopID = 2;
+        public static final int winchMotorBottomID = 3;
 
         public static final int climberSolenoidID = 2;
     }
@@ -35,12 +37,12 @@ public final class Constants {
     public static final class ShooterConstants {
         public static final int flyWheelMotorID = 5;
 
-        public static final int conveyorMotorID = 8;
-        public static final int lifterMotorID = 9;
+        public static final int conveyorMotorID = 4;
+        public static final int lifterMotorID = 5;
 
     }
 
     public static final class RobotConstants {
-        public static final int PCMID = 0;
+        public static final int PCMID = 1;
     }
 }

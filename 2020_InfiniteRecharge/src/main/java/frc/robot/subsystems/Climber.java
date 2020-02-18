@@ -22,7 +22,7 @@ public class Climber extends SubsystemBase {
   private Solenoid climberPiston = new Solenoid(RobotConstants.PCMID, ClimberConstants.climberSolenoidID);
 
   private boolean resting = true;
-  private boolean up = true;
+  private boolean up = false;
   
 
   /**

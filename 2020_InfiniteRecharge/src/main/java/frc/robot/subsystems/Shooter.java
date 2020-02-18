@@ -48,6 +48,8 @@ public class Shooter extends SubsystemBase {
     minOutput = -1; 
     maxRPM = 5700;
     setPoint = -4500;
+
+    // Motor Speeds
     liftSpd = 0.8;
     convSpd = -0.8;
 
@@ -88,14 +90,23 @@ public class Shooter extends SubsystemBase {
     lifterMotor.set(a);
   }
 
+  /**
+   * Stops the flywheel motor
+   */
   public void stopShooterMotor() {
     flyWheelMotor.stopMotor();
   }
 
+  /**
+   * Stops the kickup motor
+   */
   public void stopKickup() {
     lifterMotor.stopMotor();
   }
 
+  /**
+   * takes all values from SmartDashboard, and refreshes the code values
+   */
   public void updatePIDValues() {
     // read PID coefficients from SmartDashboard
     double p = SmartDashboard.getNumber("P Gain", 0);

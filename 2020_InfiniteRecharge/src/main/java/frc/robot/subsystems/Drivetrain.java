@@ -46,10 +46,7 @@ public class Drivetrain extends SubsystemBase {
     frontLeftMotor.setIdleMode(IdleMode.kBrake);
     frontRightMotor.setIdleMode(IdleMode.kBrake);
 
-    backLeftMotor.setClosedLoopRampRate(DriveConstants.closedLoopRampRate);
-    backRightMotor.setClosedLoopRampRate(DriveConstants.closedLoopRampRate);
-    frontLeftMotor.setClosedLoopRampRate(DriveConstants.closedLoopRampRate);
-    frontRightMotor.setClosedLoopRampRate(DriveConstants.closedLoopRampRate);
+    setOpenLoopRampRate(DriveConstants.openLRRHigh);
 
     backLeftMotor.follow(frontLeftMotor);
     backRightMotor.follow(frontRightMotor);
@@ -75,7 +72,33 @@ public class Drivetrain extends SubsystemBase {
   /**
    * @param a the boolean to set the gear
    */
-  public void shift(boolean a) { shifter.set(!a); }
+  public void shift(boolean a) { 
+    shifter.set(a); 
+
+    setOpenLoopRampRate((!a) ? DriveConstants.openLRRHigh : DriveConstants.openLRRLow);
+  }
+
+  /**
+   * @param a the maximum rate of change in milliseconds
+   */
+  public void setOpenLoopRampRate(double a) {
+    backLeftMotor.setOpenLoopRampRate(a);
+    backRightMotor.setOpenLoopRampRate(a);
+    frontLeftMotor.setOpenLoopRampRate(a);
+    frontRightMotor.setOpenLoopRampRate(a);
+  }
+
+  public double getLeftRots() {
+    return -(backLeftMotor.getEncoder().getPosition() + 
+            frontLeftMotor.getEncoder().getPosition()) / 2;
+  }
+
+  public double getRightRots() {
+    return (backRightMotor.getEncoder().getPosition() + 
+            frontRightMotor.getEncoder().getPosition()) / 2;
+  }
+
+
 
   @Override
   public void periodic() {

@@ -24,14 +24,21 @@ public final class Constants {
 
         public static final int shifterID = 1;
 
-        public static final double closedLoopRampRate = 0.254;
+        //Open Loop Ramp Rate for low gear
+        public static final double openLRRLow = 0.254;
+
+        //Open Loop Ramp Rate for High gear
+        public static final double openLRRHigh = 0.3;
+
+        public static final boolean highGear = false;
+        public static final boolean lowGear = true;
     }
 
     public static final class ClimberConstants {
         public static final int winchMotorTopID = 2;
         public static final int winchMotorBottomID = 3;
 
-        public static final int climberSolenoidID = 2;
+        public static final int climberSolenoidID = 0;
     }
 
     public static final class ShooterConstants {

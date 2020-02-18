@@ -5,25 +5,28 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.shooter;
+package frc.robot.commands.auto;
 
 import java.util.function.BooleanSupplier;
 
 import com.revrobotics.CANPIDController;
 import com.revrobotics.ControlType;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
-public class Shoot extends CommandBase {
-  private Shooter shooter;
+public class AutoShoot extends CommandBase {
+  private final Shooter shooter;
   private CANPIDController pidcontroller;
   private BooleanSupplier shoot;
 
+  private double startTime;
+
   /**
-   * Creates a new Shoot.
+   * Creates a new AutoShoot.
    */
-  public Shoot(Shooter shooter, BooleanSupplier shoot) {
+  public AutoShoot(Shooter shooter, BooleanSupplier shoot) {
     this.shooter = shooter;
     this.pidcontroller = this.shooter.getPidController();
     this.shoot = shoot;
@@ -34,6 +37,7 @@ public class Shoot extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    startTime = Timer.getFPGATimestamp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -50,14 +54,14 @@ public class Shoot extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-      shooter.stopShooterMotor();
-      shooter.setConveyorMotor(0);
-      shooter.setLifterMotor(0);
+    shooter.stopShooterMotor();
+    shooter.setConveyorMotor(0);
+    shooter.setLifterMotor(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return Timer.getFPGATimestamp() >= startTime + 5;
   }
 }

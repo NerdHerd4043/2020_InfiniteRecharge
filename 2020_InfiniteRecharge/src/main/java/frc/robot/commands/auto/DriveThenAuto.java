@@ -5,28 +5,22 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.drivetrain;
+package frc.robot.commands.auto;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.Constants.DriveConstants;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Shooter;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class ShiftUp extends InstantCommand {
-  Drivetrain drivetrain;
-
-  public ShiftUp(Drivetrain drivetrain) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    this.drivetrain = drivetrain;
-
-    addRequirements(this.drivetrain);
-  }
-
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-    drivetrain.shift(DriveConstants.highGear);
+public class DriveThenAuto extends SequentialCommandGroup {
+  /**
+   * Creates a new DriveThenAuto.
+   */
+  public DriveThenAuto(Drivetrain drivetrain, Shooter shooter) {
+    // Add your commands in the super() call, e.g.
+    // super(new FooCommand(), new BarCommand());
+    super(new OffLineAuto(drivetrain), new AutoShoot(shooter, () -> { return true; }));
   }
 }

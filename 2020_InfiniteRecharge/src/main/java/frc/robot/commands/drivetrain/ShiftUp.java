@@ -27,6 +27,6 @@ public class ShiftUp extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    drivetrain.shift(DriveConstants.highGear);
+    drivetrain.shift(DriveConstants.Gears.highGear);
   }
 }

@@ -30,8 +30,16 @@ public final class Constants {
         //Open Loop Ramp Rate for High gear
         public static final double openLRRHigh = 0.3;
 
-        public static final boolean highGear = false;
-        public static final boolean lowGear = true;
+
+        public static final class Gears {
+            public static final boolean highGear = false;
+            public static final boolean lowGear = true;
+        }
+
+        public static final class Ratios {
+            public static final double highGear = 9.4;
+            public static final double lowGear = 24;
+        }
     }
 
     public static final class ClimberConstants {

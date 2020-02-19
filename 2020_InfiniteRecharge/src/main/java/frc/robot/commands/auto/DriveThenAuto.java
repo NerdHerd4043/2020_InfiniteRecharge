@@ -21,6 +21,7 @@ public class DriveThenAuto extends SequentialCommandGroup {
   public DriveThenAuto(Drivetrain drivetrain, Shooter shooter) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    super(new OffLineAuto(drivetrain), new AutoShoot(shooter, () -> { return true; }));
+    super(new OffLineAuto(drivetrain),
+          new AutoShoot(shooter, () -> { return true; }));
   }
 }

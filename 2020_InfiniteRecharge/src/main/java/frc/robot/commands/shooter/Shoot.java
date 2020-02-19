@@ -39,10 +39,10 @@ public class Shoot extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    pidcontroller.setReference(shooter.getSetPoint(), ControlType.kVelocity);
+    pidcontroller.setReference(shooter.getFlywheelSetPoint(), ControlType.kVelocity);
     shooter.setConveyorMotor(shooter.getConveyorSpeed());
 
-    if(shoot.getAsBoolean()) { shooter.setLifterMotor(shooter.getLiftSpeed()); System.out.println("KICKING IT: " + shooter.getLiftSpeed()); } else {shooter.stopKickup();} 
+    if(shoot.getAsBoolean()) { shooter.setLifterMotor(shooter.getLiftSpeed()); System.out.println("KICKING IT: " + shooter.getLiftSpeed()); } else {shooter.stopKickupMotor();} 
 
     System.out.println("Vel: " + shooter.getFlywheelVelocity());
   }
@@ -50,7 +50,7 @@ public class Shoot extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-      shooter.stopShooterMotor();
+      shooter.stopFlywheelMotor();
       shooter.setConveyorMotor(0);
       shooter.setLifterMotor(0);
   }

@@ -93,14 +93,14 @@ public class Shooter extends SubsystemBase {
   /**
    * Stops the flywheel motor
    */
-  public void stopShooterMotor() {
+  public void stopFlywheelMotor() {
     flyWheelMotor.stopMotor();
   }
 
   /**
    * Stops the kickup motor
    */
-  public void stopKickup() {
+  public void stopKickupMotor() {
     lifterMotor.stopMotor();
   }
 
@@ -145,9 +145,9 @@ public class Shooter extends SubsystemBase {
 
   public double getFlywheelVelocity() { return encoder.getVelocity(); }
   public double getFlywheelPos() { return encoder.getPosition(); }
+  public double getFlywheelSetPoint() { return setPoint; }
   public double getLiftSpeed() { return liftSpd; }
   public double getConveyorSpeed() { return convSpd; }
-  public double getSetPoint() { return setPoint; }
 
   /**
    * @return the pidController

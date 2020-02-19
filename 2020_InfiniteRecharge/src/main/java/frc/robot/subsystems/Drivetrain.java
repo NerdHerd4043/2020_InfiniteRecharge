@@ -75,7 +75,7 @@ public class Drivetrain extends SubsystemBase {
   public void shift(boolean a) { 
     shifter.set(a); 
 
-    setOpenLoopRampRate((!a) ? DriveConstants.openLRRHigh : DriveConstants.openLRRLow);
+    setOpenLoopRampRate((DriveConstants.Gears.highGear) ? DriveConstants.openLRRHigh : DriveConstants.openLRRLow);
   }
 
   /**
@@ -88,17 +88,62 @@ public class Drivetrain extends SubsystemBase {
     frontRightMotor.setOpenLoopRampRate(a);
   }
 
+  /**
+   * @return average amount of rotations of both left motors
+   */
   public double getLeftRots() {
     return -(backLeftMotor.getEncoder().getPosition() + 
             frontLeftMotor.getEncoder().getPosition()) / 2;
   }
 
+  /**
+   * @return average amount of rotations of both right motors
+   */
   public double getRightRots() {
     return (backRightMotor.getEncoder().getPosition() + 
             frontRightMotor.getEncoder().getPosition()) / 2;
   }
 
+  /**
+   * @param rots Amount of rotations
+   * 
+   * @return estimated distance in inches in the current gear
+   */
+  public double RotsToDistance(double rots) { return RotsToDistance(rots, shifter.get()); }
 
+  /**
+   * @param rots Amount of rotations
+   * @param gear drivetrain gear
+   * 
+   * @return estimated distance in inches
+   */
+  public double RotsToDistance(double rots, boolean gear) { 
+    if (gear == DriveConstants.Gears.highGear) 
+      return Math.PI * 6 * rots * DriveConstants.Ratios.highGear; 
+    else 
+      return Math.PI * 6 * rots * DriveConstants.Ratios.lowGear; 
+  }
+
+  /**
+   * @param dist desired travel distance in rotations
+   * 
+   * @return estimated rotations required in the current gear
+   */
+  public double DistanceToRots(double dist) { return DistanceToRots(dist, shifter.get()); }
+
+
+  /**
+   * @param dist desired travel distance in rotations
+   * @param gear drivetrain gear
+   * 
+   * @return estimated rotations required in the current gear
+   */
+  public double DistanceToRots(double dist, boolean gear) {
+    if (gear  == DriveConstants.Gears.highGear) 
+      return dist / Math.PI * 6 * DriveConstants.Ratios.highGear;
+    else
+      return dist / Math.PI * 6 * DriveConstants.Ratios.lowGear;
+  }
 
   @Override
   public void periodic() {

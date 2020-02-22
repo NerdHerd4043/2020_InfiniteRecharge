@@ -63,8 +63,8 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(driveStick, Button.kBack.value).whenPressed(new ClimberUp(climber), true);
-    new JoystickButton(driveStick, Button.kStart.value).toggleWhenPressed(new ClimberDown(climber), true);
+    new JoystickButton(driveStick, Button.kBack.value).whenPressed(new ClimberUp(climber, () -> { return driveStick.getTriggerAxis(GenericHID.Hand.kRight) - driveStick.getTriggerAxis(GenericHID.Hand.kLeft); }), true);
+    new JoystickButton(driveStick, Button.kStart.value).toggleWhenPressed(new ClimberDown(climber, () -> { return driveStick.getTriggerAxis(GenericHID.Hand.kRight) - driveStick.getTriggerAxis(GenericHID.Hand.kLeft); }), true);
 
     new JoystickButton(driveStick, Button.kX.value).toggleWhenPressed(new Shoot(shooter, () -> driveStick.getAButton()), true);
 
@@ -84,11 +84,20 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
     return autoCommand;
   }
 
+  /**
+   * @return the drivebase subsystem
+   */
   public Drivetrain getDrivetrain() {
     return drivetrain;
+  }
+
+  /**
+   * @return current accumulative angle of the navx sensor
+   */
+  public double getAngle() {
+    return navxAhrs.getAngle();
   }
 }

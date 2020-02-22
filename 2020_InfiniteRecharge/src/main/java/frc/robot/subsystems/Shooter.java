@@ -20,14 +20,14 @@ import frc.robot.Constants.ShooterConstants;
 public class Shooter extends SubsystemBase {
   private CANSparkMax flyWheelMotor = new CANSparkMax(ShooterConstants.flyWheelMotorID, MotorType.kBrushless);
 
-  private WPI_TalonSRX conveyorMotor = new WPI_TalonSRX(ShooterConstants.conveyorMotorID);
-  private WPI_TalonSRX lifterMotor = new WPI_TalonSRX(ShooterConstants.lifterMotorID);
+  private WPI_TalonSRX feederMotor = new WPI_TalonSRX(ShooterConstants.conveyorMotorID);
+  private WPI_TalonSRX kickupMotor = new WPI_TalonSRX(ShooterConstants.lifterMotorID);
 
   private CANPIDController pidController;
   private CANEncoder encoder;
 
   // PID Variables
-  public double kP, kI, kD, kIz, kFF, maxOutput, minOutput, maxRPM, convSpd, liftSpd, setPoint;
+  public double kP, kI, kD, kIz, kFF, maxOutput, minOutput, maxRPM, feedSpd, kickSpd, setPoint;
 
   /**
    * Creates a new Shooter.
@@ -47,11 +47,11 @@ public class Shooter extends SubsystemBase {
     maxOutput = 1;
     minOutput = -1; 
     maxRPM = 5700;
-    setPoint = -4500;
+    setPoint = -7000;
 
     // Motor Speeds
-    liftSpd = 0.8;
-    convSpd = -0.8;
+    kickSpd = 0.8;
+    feedSpd = -0.8;
 
     // set PID coeffecients
     pidController.setP(kP);
@@ -70,8 +70,8 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Min Output", minOutput);
 
     SmartDashboard.putNumber("Set Point", setPoint);
-    SmartDashboard.putNumber("Conveyor Speed", convSpd);
-    SmartDashboard.putNumber("Lifter Speed", liftSpd);
+    SmartDashboard.putNumber("Conveyor Speed", feedSpd);
+    SmartDashboard.putNumber("Lifter Speed", kickSpd);
 
     SmartDashboard.putNumber("Flywheel Velocity", getFlywheelVelocity());
   }
@@ -79,15 +79,15 @@ public class Shooter extends SubsystemBase {
   /**
    * @param a the power to set the conveyorMotor to
    */
-  public void setConveyorMotor(double a) {
-    conveyorMotor.set(a);
+  public void setFeederMotor(double a) {
+    feederMotor.set(a);
   }
 
   /**
    * @param a the power to set the lifterMotor to
    */
-  public void setLifterMotor(double a) {
-    lifterMotor.set(a);
+  public void setKickupMotor(double a) {
+    kickupMotor.set(a);
   }
 
   /**
@@ -101,7 +101,14 @@ public class Shooter extends SubsystemBase {
    * Stops the kickup motor
    */
   public void stopKickupMotor() {
-    lifterMotor.stopMotor();
+    kickupMotor.stopMotor();
+  }
+
+  /**
+   * Stops the Feeder motor
+   */
+  public void stopFeederMotor() {
+    feederMotor.stopMotor();
   }
 
   /**
@@ -135,8 +142,8 @@ public class Shooter extends SubsystemBase {
       minOutput = min; maxOutput = max; 
     }
 
-    if((convSpd != conv)) { convSpd = conv; }
-    if((liftSpd != lift)) { liftSpd = lift; }
+    if((feedSpd != conv)) { feedSpd = conv; }
+    if((kickSpd != lift)) { kickSpd = lift; }
  
     if((dSetPoint != setPoint)) { setPoint = dSetPoint; }
 
@@ -146,8 +153,8 @@ public class Shooter extends SubsystemBase {
   public double getFlywheelVelocity() { return encoder.getVelocity(); }
   public double getFlywheelPos() { return encoder.getPosition(); }
   public double getFlywheelSetPoint() { return setPoint; }
-  public double getLiftSpeed() { return liftSpd; }
-  public double getConveyorSpeed() { return convSpd; }
+  public double getLiftSpeed() { return kickSpd; }
+  public double getConveyorSpeed() { return feedSpd; }
 
   /**
    * @return the pidController
@@ -160,6 +167,5 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     updatePIDValues();
-
   }
 }

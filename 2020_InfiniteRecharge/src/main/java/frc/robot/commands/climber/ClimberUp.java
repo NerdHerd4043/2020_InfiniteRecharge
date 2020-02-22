@@ -7,17 +7,22 @@
 
 package frc.robot.commands.climber;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 
 public class ClimberUp extends CommandBase {
   private Climber climber;
 
+  private DoubleSupplier winchSpeed;
+
   /**
    * Creates a new ClimberUp.
    */
-  public ClimberUp(Climber climber) {
+  public ClimberUp(Climber climber, DoubleSupplier winchSpeed) {
     this.climber = climber;
+    this.winchSpeed = winchSpeed;
 
     addRequirements(this.climber);
   }
@@ -31,7 +36,7 @@ public class ClimberUp extends CommandBase {
   @Override
   public void execute() {
      
-    climber.climberUp();
+    climber.climberUp(winchSpeed.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.

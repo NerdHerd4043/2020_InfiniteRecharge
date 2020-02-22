@@ -7,17 +7,22 @@
 
 package frc.robot.commands.climber;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 
 public class ClimberDown extends CommandBase {
   private Climber climber;
   
+  private DoubleSupplier winchSpeed;
+
   /**
    * Creates a new ClimberDown.
    */
-  public ClimberDown(Climber climber) {
+  public ClimberDown(Climber climber, DoubleSupplier winchSpeed) {
     this.climber = climber;
+    this.winchSpeed = winchSpeed;
 
     addRequirements(this.climber);
   }
@@ -30,7 +35,7 @@ public class ClimberDown extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    climber.climberDown(); 
+    climber.climberDown(winchSpeed.getAsDouble()); 
   }
 
   // Called once the command ends or is interrupted.

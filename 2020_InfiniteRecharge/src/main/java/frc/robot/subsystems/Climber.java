@@ -29,8 +29,7 @@ public class Climber extends SubsystemBase {
    * Creates a new Climber.
    */
   public Climber() {
-    winchMotorF.setNeutralMode(NeutralMode.Brake);
-    winchMotorB.setNeutralMode(NeutralMode.Brake);
+    setBrakeMode(true);
     winchMotorB.follow(winchMotorF);
 
     climberPiston.set(false);
@@ -39,21 +38,25 @@ public class Climber extends SubsystemBase {
   /**
    * Extend the climber
    */
-  public void climberUp() {
+  public void climberUp(double winchSpd) {
     climberPiston.set(true);
-    winchMotorF.stopMotor();
+    winchMotorF.set(winchSpd);
+    // setBrakeMode(false);
     this.setResting(false);
     this.setUp(true);
+    System.out.println("Spd: " + winchSpd);
   }
 
   /**
    * Retract the climber
    */
-  public void climberDown() {
+  public void climberDown(double winchSpd) {
     climberPiston.set(false);
-    winchMotorF.set(-0.2);
+    // setBrakeMode(true);
+    winchMotorF.set(winchSpd);
     this.setResting(false);
     this.setUp(false);
+    System.out.println("Spd: " + winchSpd);
   }
 
   /**
@@ -61,9 +64,23 @@ public class Climber extends SubsystemBase {
    */
   public void climberRest() {
     climberPiston.set(false);
+    // setBrakeMode(true);
     winchMotorF.stopMotor();
     this.setResting(true);
     this.setUp(false);
+  }
+
+  /**
+   * @param brake set to true for break mode, false for coast
+   */
+  public void setBrakeMode(boolean brake) {
+    if(brake) {
+      winchMotorF.setNeutralMode(NeutralMode.Brake);
+      winchMotorB.setNeutralMode(NeutralMode.Brake);
+    } else {
+      winchMotorF.setNeutralMode(NeutralMode.Coast);
+      winchMotorB.setNeutralMode(NeutralMode.Coast);
+    }
   }
 
   /**

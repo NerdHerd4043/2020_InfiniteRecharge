@@ -20,7 +20,7 @@ import frc.robot.commands.drivetrain.*;
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
-public class Robot extends TimedRobot {
+public class Robot extends TimedRobot { 
   private Command autoCommand;
 
   private RobotContainer robotContainer;
@@ -34,6 +34,10 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
+
+    robotContainer.getDrivetrain()
+                  .getForwardSensor()
+                  .setAutomaticMode(false);
 
     new ShiftUp(robotContainer.getDrivetrain()).schedule();
   }
@@ -59,6 +63,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+    robotContainer.getDrivetrain()
+                  .getForwardSensor()
+                  .setAutomaticMode(false);
   }
 
   @Override
@@ -70,7 +77,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-
+    robotContainer.getDrivetrain()
+                  .getForwardSensor()
+                  .setAutomaticMode(true);
     
     autoCommand = robotContainer.getAutonomousCommand();
 
@@ -89,6 +98,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    robotContainer.getDrivetrain()
+                  .getForwardSensor()
+                  .setAutomaticMode(true);
+
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
@@ -111,6 +124,10 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
+
+    robotContainer.getDrivetrain()
+                  .getForwardSensor()
+                  .setAutomaticMode(true);
   }
 
   /**
@@ -118,5 +135,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+    if(robotContainer.getDrivetrain().getForwardSensor().isRangeValid()) 
+      System.out.println(robotContainer.getDrivetrain().getForwardSensor().getRange());
+    else 
+      System.out.println("Invalid range");
   }
 }

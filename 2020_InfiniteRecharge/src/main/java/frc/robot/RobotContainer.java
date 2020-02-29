@@ -31,8 +31,10 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Drivetrain drivetrain = new Drivetrain();
-  private final Shooter shooter = new Shooter();
+  private final Flywheel shooter = new Flywheel();
   private final Climber climber = new Climber();
+  private final Feeder feeder = new Feeder();
+  private final Kickup kickup = new Kickup();
 
   private final DriveThenAuto autoCommand = new DriveThenAuto(drivetrain, shooter);
 
@@ -66,7 +68,9 @@ public class RobotContainer {
     new JoystickButton(driveStick, Button.kBack.value).whenPressed(new ClimberUp(climber, () -> { return driveStick.getTriggerAxis(GenericHID.Hand.kRight) - driveStick.getTriggerAxis(GenericHID.Hand.kLeft); }), true);
     new JoystickButton(driveStick, Button.kStart.value).toggleWhenPressed(new ClimberDown(climber, () -> { return driveStick.getTriggerAxis(GenericHID.Hand.kRight) - driveStick.getTriggerAxis(GenericHID.Hand.kLeft); }), true);
 
-    new JoystickButton(driveStick, Button.kX.value).toggleWhenPressed(new Shoot(shooter, () -> driveStick.getAButton()), true);
+    new JoystickButton(driveStick, Button.kY.value).toggleWhenPressed(new Shoot(shooter), true);
+    new JoystickButton(driveStick, Button.kA.value).toggleWhenPressed(new Feed(feeder), true);
+    new JoystickButton(driveStick, Button.kX.value).whenPressed(new Kick(kickup), true);
 
     new JoystickButton(driveStick, Button.kBumperRight.value).whenPressed(new ShiftUp(drivetrain));
     new JoystickButton(driveStick, Button.kBumperLeft.value).whenPressed(new ShiftDown(drivetrain));

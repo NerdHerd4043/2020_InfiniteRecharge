@@ -14,10 +14,10 @@ import com.revrobotics.ControlType;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Flywheel;
 
 public class AutoShoot extends CommandBase {
-  private final Shooter shooter;
+  private final Flywheel shooter;
   private CANPIDController pidcontroller;
   private BooleanSupplier shoot;
 
@@ -26,7 +26,7 @@ public class AutoShoot extends CommandBase {
   /**
    * Creates a new AutoShoot.
    */
-  public AutoShoot(Shooter shooter, BooleanSupplier shoot) {
+  public AutoShoot(Flywheel shooter, BooleanSupplier shoot) {
     this.shooter = shooter;
     this.pidcontroller = this.shooter.getPidController();
     this.shoot = shoot;
@@ -43,9 +43,6 @@ public class AutoShoot extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.setFeederMotor(shooter.getConveyorSpeed());
-    shooter.setKickupMotor(shooter.getLiftSpeed());
-
     // System.out.println("KICKING IT: " + shooter.getLiftSpeed());
     if(shoot.getAsBoolean()) { pidcontroller.setReference(shooter.getFlywheelSetPoint(), ControlType.kVelocity); } else { shooter.stopFlywheelMotor(); } 
 
@@ -57,8 +54,6 @@ public class AutoShoot extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     shooter.stopFlywheelMotor();
-    shooter.stopFeederMotor();;
-    shooter.stopKickupMotor();
   }
 
   // Returns true when the command should end.

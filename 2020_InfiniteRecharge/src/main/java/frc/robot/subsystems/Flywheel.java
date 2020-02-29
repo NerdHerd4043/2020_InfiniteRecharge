@@ -7,7 +7,6 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
@@ -17,11 +16,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
 
-public class Shooter extends SubsystemBase {
+public class Flywheel extends SubsystemBase {
   private CANSparkMax flyWheelMotor = new CANSparkMax(ShooterConstants.flyWheelMotorID, MotorType.kBrushless);
-
-  private WPI_TalonSRX feederMotor = new WPI_TalonSRX(ShooterConstants.conveyorMotorID);
-  private WPI_TalonSRX kickupMotor = new WPI_TalonSRX(ShooterConstants.lifterMotorID);
 
   private CANPIDController pidController;
   private CANEncoder encoder;
@@ -32,7 +28,7 @@ public class Shooter extends SubsystemBase {
   /**
    * Creates a new Shooter.
    */
-  public Shooter() {
+  public Flywheel() {
     flyWheelMotor.restoreFactoryDefaults();
 
     pidController = flyWheelMotor.getPIDController();
@@ -70,24 +66,8 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Min Output", minOutput);
 
     SmartDashboard.putNumber("Set Point", setPoint);
-    SmartDashboard.putNumber("Conveyor Speed", feedSpd);
-    SmartDashboard.putNumber("Lifter Speed", kickSpd);
 
     SmartDashboard.putNumber("Flywheel Velocity", getFlywheelVelocity());
-  }
-
-  /**
-   * @param a the power to set the conveyorMotor to
-   */
-  public void setFeederMotor(double a) {
-    feederMotor.set(a);
-  }
-
-  /**
-   * @param a the power to set the lifterMotor to
-   */
-  public void setKickupMotor(double a) {
-    kickupMotor.set(a);
   }
 
   /**
@@ -95,20 +75,6 @@ public class Shooter extends SubsystemBase {
    */
   public void stopFlywheelMotor() {
     flyWheelMotor.stopMotor();
-  }
-
-  /**
-   * Stops the kickup motor
-   */
-  public void stopKickupMotor() {
-    kickupMotor.stopMotor();
-  }
-
-  /**
-   * Stops the Feeder motor
-   */
-  public void stopFeederMotor() {
-    feederMotor.stopMotor();
   }
 
   /**
@@ -123,9 +89,6 @@ public class Shooter extends SubsystemBase {
     double ff = SmartDashboard.getNumber("Feed Forward", 0);
     double max = SmartDashboard.getNumber("Max Output", 0);
     double min = SmartDashboard.getNumber("Min Output", 0);
-
-    double conv = SmartDashboard.getNumber("Conveyor Speed", 0);
-    double lift = SmartDashboard.getNumber("Lifter Speed", 0);
 
     double dSetPoint = SmartDashboard.getNumber("Set Point", 0);
 
@@ -142,9 +105,6 @@ public class Shooter extends SubsystemBase {
       minOutput = min; maxOutput = max; 
     }
 
-    if((feedSpd != conv)) { feedSpd = conv; }
-    if((kickSpd != lift)) { kickSpd = lift; }
- 
     if((dSetPoint != setPoint)) { setPoint = dSetPoint; }
 
     if(vel != getFlywheelVelocity()){ SmartDashboard.putNumber("Flywheel Velocity", getFlywheelVelocity()); }
@@ -153,8 +113,6 @@ public class Shooter extends SubsystemBase {
   public double getFlywheelVelocity() { return encoder.getVelocity(); }
   public double getFlywheelPos() { return encoder.getPosition(); }
   public double getFlywheelSetPoint() { return setPoint; }
-  public double getLiftSpeed() { return kickSpd; }
-  public double getConveyorSpeed() { return feedSpd; }
 
   /**
    * @return the pidController

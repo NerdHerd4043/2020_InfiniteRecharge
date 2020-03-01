@@ -22,6 +22,8 @@ public class Flywheel extends SubsystemBase {
   private CANPIDController pidController;
   private CANEncoder encoder;
 
+  private final String dSetPoint = "Set Point";
+
   // PID Variables
   public double kP, kI, kD, kIz, kFF, maxOutput, minOutput, maxRPM, feedSpd, kickSpd, setPoint;
 
@@ -43,7 +45,7 @@ public class Flywheel extends SubsystemBase {
     maxOutput = 1;
     minOutput = -1; 
     maxRPM = 5700;
-    setPoint = -7000;
+    setPoint = -14000;
 
     // Motor Speeds
     kickSpd = 0.8;
@@ -65,7 +67,7 @@ public class Flywheel extends SubsystemBase {
     SmartDashboard.putNumber("Max Output", maxOutput);
     SmartDashboard.putNumber("Min Output", minOutput);
 
-    SmartDashboard.putNumber("Set Point", setPoint);
+    SmartDashboard.putNumber(dSetPoint, setPoint);
 
     SmartDashboard.putNumber("Flywheel Velocity", getFlywheelVelocity());
   }
@@ -90,7 +92,7 @@ public class Flywheel extends SubsystemBase {
     double max = SmartDashboard.getNumber("Max Output", 0);
     double min = SmartDashboard.getNumber("Min Output", 0);
 
-    double dSetPoint = SmartDashboard.getNumber("Set Point", 0);
+    double newSetPoint = SmartDashboard.getNumber(dSetPoint, 0);
 
     double vel = SmartDashboard.getNumber("Flywheel Velocity", 0);
 
@@ -105,7 +107,7 @@ public class Flywheel extends SubsystemBase {
       minOutput = min; maxOutput = max; 
     }
 
-    if((dSetPoint != setPoint)) { setPoint = dSetPoint; }
+    if((newSetPoint != setPoint)) { setPoint = newSetPoint; }
 
     if(vel != getFlywheelVelocity()){ SmartDashboard.putNumber("Flywheel Velocity", getFlywheelVelocity()); }
   }
@@ -113,6 +115,7 @@ public class Flywheel extends SubsystemBase {
   public double getFlywheelVelocity() { return encoder.getVelocity(); }
   public double getFlywheelPos() { return encoder.getPosition(); }
   public double getFlywheelSetPoint() { return setPoint; }
+  public String getSetPointTag() { return dSetPoint; }
 
   /**
    * @return the pidController

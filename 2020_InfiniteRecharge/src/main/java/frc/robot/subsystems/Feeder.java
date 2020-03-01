@@ -18,13 +18,15 @@ public class Feeder extends SubsystemBase {
 
   private double feedSpd;
 
+  private final String dFeederSpeed = "Feeder Speed";
+
   /**
    * Creates a new Feeder.
    */
   public Feeder() {
-       feedSpd = -0.8;
+       feedSpd = 0.8;
     
-       SmartDashboard.putNumber("Feeder Speed", feedSpd);
+       SmartDashboard.putNumber(dFeederSpeed, feedSpd);
   }
 
   /**
@@ -45,15 +47,18 @@ public class Feeder extends SubsystemBase {
    * takes all values from SmartDashboard, and refreshes the code values
    */
   public void updatePIDValues() {
-    double feed = SmartDashboard.getNumber("Feeder Speed", 0);
+    double feed = SmartDashboard.getNumber(dFeederSpeed, 0);
 
     if((feedSpd != feed)) { feedSpd = feed; }
   }
 
   public double getFeederSpeed() { return feedSpd; }
+  public String getSpeedTag() { return dFeederSpeed; }
+
 
   @Override
   public void periodic() {
+    updatePIDValues();  
     // This method will be called once per scheduler run
   }
 }

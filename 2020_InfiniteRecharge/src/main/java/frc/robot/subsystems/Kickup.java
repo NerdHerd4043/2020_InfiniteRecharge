@@ -18,14 +18,16 @@ public class Kickup extends SubsystemBase {
 
   private double kickSpd;
 
+  private final String dKickupSpeed = "Kickup Speed";
+
   /**
    * Creates a new Kickup.
    */
   public Kickup() {
     // Motor Speeds
-    kickSpd = 0.8;
+    kickSpd = -0.8;
 
-    SmartDashboard.putNumber("Kickup Speed", kickSpd);
+    SmartDashboard.putNumber(dKickupSpeed, kickSpd);
   }
 
   /**
@@ -43,15 +45,17 @@ public class Kickup extends SubsystemBase {
   }
 
   public void updatePIDValues() {
-    double lift = SmartDashboard.getNumber("Kickup Speed", 0);
+    double lift = SmartDashboard.getNumber(dKickupSpeed, 0);
 
     if((kickSpd != lift)) { kickSpd = lift; }
   }
 
   public double getKickSpeed() { return kickSpd; }
+  public String getSpeedTag() { return dKickupSpeed; }
 
   @Override
   public void periodic() {
+    updatePIDValues();
     // This method will be called once per scheduler run
   }
 }

@@ -89,6 +89,8 @@ public class Drivetrain extends SubsystemBase {
     setOpenLoopRampRate((DriveConstants.Gears.highGear) ? DriveConstants.openLRRHigh : DriveConstants.openLRRLow);
   }
 
+  public void setOpenLoopRampRate(boolean a) {}
+
   /**
    * @param a the maximum rate of change in milliseconds
    */
@@ -130,9 +132,9 @@ public class Drivetrain extends SubsystemBase {
    */
   public double RotsToDistance(double rots, boolean gear) { 
     if (gear == DriveConstants.Gears.highGear) 
-      return Math.PI * 6 * rots * DriveConstants.Ratios.highGear; 
+      return (Math.PI * 6 * rots) / DriveConstants.Ratios.highGear; 
     else 
-      return Math.PI * 6 * rots * DriveConstants.Ratios.lowGear; 
+      return (Math.PI * 6 * rots) / DriveConstants.Ratios.lowGear; 
   }
 
   /**
@@ -150,9 +152,9 @@ public class Drivetrain extends SubsystemBase {
    */
   public double DistanceToRots(double dist, boolean gear) {
     if (gear == DriveConstants.Gears.highGear) 
-      return dist / Math.PI * 6 * DriveConstants.Ratios.highGear;
+      return (dist * DriveConstants.Ratios.highGear) / (Math.PI * 6);
     else
-      return dist / Math.PI * 6 * DriveConstants.Ratios.lowGear;
+      return (dist * DriveConstants.Ratios.lowGear) / (Math.PI * 6);
   }
 
   public Rev2mDistanceSensor getForwardSensor() {

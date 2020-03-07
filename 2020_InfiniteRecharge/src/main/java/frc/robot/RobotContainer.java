@@ -72,8 +72,8 @@ public class RobotContainer {
     new JoystickButton(driveStick, Button.kA.value).toggleWhenPressed(new Feed(feeder), true);
     new JoystickButton(driveStick, Button.kX.value).whileHeld(new Kick(kickup), true);
 
-    new JoystickButton(driveStick, Button.kStickLeft.value).whenPressed(new OpenHopper(flywheel));
-    new JoystickButton(driveStick, Button.kStickRight.value).whenReleased(new CloseHopper(flywheel));
+    new JoystickButton(driveStick, Button.kStickLeft.value).whenPressed(new OpenHopper(kickup), true);
+    new JoystickButton(driveStick, Button.kStickLeft.value).whenReleased(new CloseHopper(kickup), true);
 
     new JoystickButton(driveStick, Button.kBumperRight.value).whenPressed(new ShiftUp(drivetrain));
     new JoystickButton(driveStick, Button.kBumperLeft.value).whenPressed(new ShiftDown(drivetrain));

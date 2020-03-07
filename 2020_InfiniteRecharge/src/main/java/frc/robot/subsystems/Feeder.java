@@ -7,14 +7,16 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+// import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
 
 public class Feeder extends SubsystemBase {
-  private WPI_TalonSRX feederMotor = new WPI_TalonSRX(ShooterConstants.conveyorMotorID);
+  private CANSparkMax feederMotor = new CANSparkMax(ShooterConstants.conveyorMotorID, MotorType.kBrushless);
 
   private double feedSpd;
 
@@ -24,9 +26,12 @@ public class Feeder extends SubsystemBase {
    * Creates a new Feeder.
    */
   public Feeder() {
-       feedSpd = 0.8;
+    feederMotor.restoreFactoryDefaults();
+    feedSpd = -0.8;
     
-       SmartDashboard.putNumber(dFeederSpeed, feedSpd);
+    // feederMotor.setSmartCurrentLimit(5);
+
+    SmartDashboard.putNumber(dFeederSpeed, feedSpd);
   }
 
   /**

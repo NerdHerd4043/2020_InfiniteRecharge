@@ -8,16 +8,16 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.subsystems.Flywheel;
+import frc.robot.subsystems.Kickup;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
 public class CloseHopper extends InstantCommand {
-  private Flywheel flywheel;
+  private Kickup flywheel;
 
-  public CloseHopper(Flywheel flywheel) {
-    this.flywheel = flywheel;
+  public CloseHopper(Kickup kickup) {
+    this.flywheel = kickup;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(this.flywheel);
@@ -25,6 +25,7 @@ public class CloseHopper extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    flywheel.setHopper(false);
+    System.out.println("C%lose");
+    flywheel.setDoor(false);
   }
 }

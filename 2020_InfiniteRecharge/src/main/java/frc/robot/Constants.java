@@ -52,7 +52,7 @@ public final class Constants {
     public static final class ShooterConstants {
         public static final int flyWheelMotorID = 5;
 
-        public static final int conveyorMotorID = 4;
+        public static final int conveyorMotorID = 6;
         public static final int lifterMotorID = 5;
 
         public static final int hopperSolonoidId = 7;

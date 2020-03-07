@@ -12,10 +12,8 @@ import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.RobotConstants;
 import frc.robot.Constants.ShooterConstants;
 
 public class Flywheel extends SubsystemBase {
@@ -23,8 +21,6 @@ public class Flywheel extends SubsystemBase {
 
   private CANPIDController pidController;
   private CANEncoder encoder;
-
-  private Solenoid hopper = new Solenoid(RobotConstants.PCMID, ShooterConstants.hopperSolonoidId);
 
   private final String dSetPoint = "Set Point";
 
@@ -43,15 +39,15 @@ public class Flywheel extends SubsystemBase {
     encoder = flyWheelMotor.getEncoder();
 
     // PID Coefficients
-    kP = 6e-5;
-    kI = 1e-6;
-    kD = 1e-3;
+    kP = 0.0003;
+    kI = 0.0001;
+    kD = 1;
     kIz = 1e-1;
-    kFF = -0.000015;
+    kFF = -0.00015;
     maxOutput = 1;
     minOutput = -1; 
-    maxRPM = 5700;
-    setPoint = -14000;
+    maxRPM = 10000;
+    setPoint = -5500;
 
     setPointAdj = 0;
 
@@ -137,13 +133,6 @@ public class Flywheel extends SubsystemBase {
 
   public void adjustSetPoint(double a) {
     setPointAdj += a * 100;
-  }
-
-  /**
-   * @param a the state to set the hopper to
-   */
-  public void setHopper(boolean a) {
-    hopper.set(a);
   }
 
   @Override

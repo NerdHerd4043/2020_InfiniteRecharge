@@ -12,9 +12,14 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants.RobotConstants;
+import edu.wpi.first.wpilibj.Solenoid;
+
 
 public class Kickup extends SubsystemBase {
   private WPI_TalonSRX kickupMotor = new WPI_TalonSRX(ShooterConstants.lifterMotorID);
+
+  private Solenoid hopper = new Solenoid(RobotConstants.PCMID, ShooterConstants.hopperSolonoidId);
 
   private double kickSpd;
 
@@ -42,6 +47,13 @@ public class Kickup extends SubsystemBase {
    */
   public void set(double a) {
     kickupMotor.set(a);
+  }
+
+  /**
+   * @param a the state to set the hopper to
+   */
+  public void setDoor(boolean a) {
+    hopper.set(a);
   }
 
   public void updatePIDValues() {

@@ -55,6 +55,8 @@ public final class Constants {
         public static final int conveyorMotorID = 4;
         public static final int lifterMotorID = 5;
 
+        public static final int hopperSolonoidId = 7;
+
     }
 
     public static final class RobotConstants {

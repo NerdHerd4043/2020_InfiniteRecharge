@@ -31,12 +31,12 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Drivetrain drivetrain = new Drivetrain();
-  private final Flywheel shooter = new Flywheel();
+  private final Flywheel flywheel = new Flywheel();
   private final Climber climber = new Climber();
   private final Feeder feeder = new Feeder();
   private final Kickup kickup = new Kickup();
 
-  private final DriveThenAuto autoCommand = new DriveThenAuto(drivetrain, shooter);
+  private final DriveThenAuto autoCommand = new DriveThenAuto(drivetrain, flywheel);
 
   private static AHRS navxAhrs = new AHRS(SPI.Port.kMXP);
 
@@ -68,9 +68,12 @@ public class RobotContainer {
     new JoystickButton(driveStick, Button.kBack.value).whenPressed(new ClimberUp(climber, () -> { return driveStick.getTriggerAxis(GenericHID.Hand.kRight) - driveStick.getTriggerAxis(GenericHID.Hand.kLeft); }), true);
     new JoystickButton(driveStick, Button.kStart.value).toggleWhenPressed(new ClimberDown(climber, () -> { return driveStick.getTriggerAxis(GenericHID.Hand.kRight) - driveStick.getTriggerAxis(GenericHID.Hand.kLeft); }), true);
 
-    new JoystickButton(driveStick, Button.kY.value).toggleWhenPressed(new Shoot(shooter), true);
+    new JoystickButton(driveStick, Button.kY.value).toggleWhenPressed(new Shoot(flywheel), true);
     new JoystickButton(driveStick, Button.kA.value).toggleWhenPressed(new Feed(feeder), true);
     new JoystickButton(driveStick, Button.kX.value).whileHeld(new Kick(kickup), true);
+
+    new JoystickButton(driveStick, Button.kStickLeft.value).whenPressed(new OpenHopper(flywheel));
+    new JoystickButton(driveStick, Button.kStickRight.value).whenReleased(new CloseHopper(flywheel));
 
     new JoystickButton(driveStick, Button.kBumperRight.value).whenPressed(new ShiftUp(drivetrain));
     new JoystickButton(driveStick, Button.kBumperLeft.value).whenPressed(new ShiftDown(drivetrain));

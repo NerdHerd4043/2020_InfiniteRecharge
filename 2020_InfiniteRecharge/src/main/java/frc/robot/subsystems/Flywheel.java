@@ -12,8 +12,10 @@ import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.RobotConstants;
 import frc.robot.Constants.ShooterConstants;
 
 public class Flywheel extends SubsystemBase {
@@ -22,10 +24,14 @@ public class Flywheel extends SubsystemBase {
   private CANPIDController pidController;
   private CANEncoder encoder;
 
+  private Solenoid hopper = new Solenoid(RobotConstants.PCMID, ShooterConstants.hopperSolonoidId);
+
   private final String dSetPoint = "Set Point";
 
   // PID Variables
   public double kP, kI, kD, kIz, kFF, maxOutput, minOutput, maxRPM, feedSpd, kickSpd, setPoint;
+
+  public double setPointAdj;
 
   /**
    * Creates a new Shooter.
@@ -46,6 +52,8 @@ public class Flywheel extends SubsystemBase {
     minOutput = -1; 
     maxRPM = 5700;
     setPoint = -14000;
+
+    setPointAdj = 0;
 
     // Motor Speeds
     kickSpd = 0.8;
@@ -114,14 +122,28 @@ public class Flywheel extends SubsystemBase {
 
   public double getFlywheelVelocity() { return encoder.getVelocity(); }
   public double getFlywheelPos() { return encoder.getPosition(); }
-  public double getFlywheelSetPoint() { return setPoint; }
+  public double getFlywheelSetPoint() { return setPoint + setPointAdj; }
+  public double getDefaultFlywheelSetPoint() { return setPoint; }
   public String getSetPointTag() { return dSetPoint; }
+
+  
 
   /**
    * @return the pidController
    */
   public CANPIDController getPidController() {
     return pidController;
+  }
+
+  public void adjustSetPoint(double a) {
+    setPointAdj += a * 100;
+  }
+
+  /**
+   * @param a the state to set the hopper to
+   */
+  public void setHopper(boolean a) {
+    hopper.set(a);
   }
 
   @Override

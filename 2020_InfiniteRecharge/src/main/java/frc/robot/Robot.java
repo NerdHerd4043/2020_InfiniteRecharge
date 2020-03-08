@@ -63,6 +63,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+    robotContainer.resetFlywheelAdjust();
+
     robotContainer.getDrivetrain()
                   .getForwardSensor()
                   .setAutomaticMode(false);
@@ -77,6 +79,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    robotContainer.resetFlywheelAdjust();
+
     robotContainer.getDrivetrain()
                   .getForwardSensor()
                   .setAutomaticMode(true);
@@ -98,6 +102,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    robotContainer.resetFlywheelAdjust();
+
     robotContainer.getDrivetrain()
                   .getForwardSensor()
                   .setAutomaticMode(true);

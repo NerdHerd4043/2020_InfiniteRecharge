@@ -69,11 +69,13 @@ public class RobotContainer {
     new JoystickButton(driveStick, Button.kStart.value).toggleWhenPressed(new ClimberDown(climber, () -> { return driveStick.getTriggerAxis(GenericHID.Hand.kRight) - driveStick.getTriggerAxis(GenericHID.Hand.kLeft); }), true);
 
     new JoystickButton(driveStick, Button.kY.value).toggleWhenPressed(new Shoot(flywheel), true);
-    new JoystickButton(driveStick, Button.kA.value).toggleWhenPressed(new Feed(feeder), true);
+    new JoystickButton(driveStick, Button.kA.value).whileHeld(new Feed(feeder), true);
     new JoystickButton(driveStick, Button.kX.value).whileHeld(new Kick(kickup), true);
+    new JoystickButton(driveStick, Button.kB.value).whenPressed(new ResetFlywheelAdjustment(flywheel), true);
 
     new JoystickButton(driveStick, Button.kStickLeft.value).whenPressed(new OpenHopper(kickup), true);
     new JoystickButton(driveStick, Button.kStickLeft.value).whenReleased(new CloseHopper(kickup), true);
+
 
     new JoystickButton(driveStick, Button.kBumperRight.value).whenPressed(new ShiftUp(drivetrain));
     new JoystickButton(driveStick, Button.kBumperLeft.value).whenPressed(new ShiftDown(drivetrain));
@@ -106,5 +108,9 @@ public class RobotContainer {
    */
   public double getAngle() {
     return navxAhrs.getAngle();
+  }
+
+  public void resetFlywheelAdjust() {
+    flywheel.resetSetPointAdj();
   }
 }

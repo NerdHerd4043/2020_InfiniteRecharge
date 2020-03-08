@@ -52,7 +52,8 @@ public class Drivetrain extends SubsystemBase {
     frontLeftMotor.setIdleMode(IdleMode.kBrake);
     frontRightMotor.setIdleMode(IdleMode.kBrake);
 
-    setOpenLoopRampRate(DriveConstants.openLRRHigh);
+    shifter.set(false);
+    setOpenLoopRampRate();
 
     backLeftMotor.follow(frontLeftMotor);
     backRightMotor.follow(frontRightMotor);
@@ -86,10 +87,12 @@ public class Drivetrain extends SubsystemBase {
   public void shift(boolean a) { 
     shifter.set(a); 
 
-    setOpenLoopRampRate((DriveConstants.Gears.highGear) ? DriveConstants.openLRRHigh : DriveConstants.openLRRLow);
+    setOpenLoopRampRate((DriveConstants.Gears.highGear != shifter.get()) ? DriveConstants.openLRRHigh : DriveConstants.openLRRLow);
   }
 
-  public void setOpenLoopRampRate(boolean a) {}
+  public void setOpenLoopRampRate() {
+    setOpenLoopRampRate((DriveConstants.Gears.highGear != shifter.get()) ? DriveConstants.openLRRHigh : DriveConstants.openLRRLow);
+  }
 
   /**
    * @param a the maximum rate of change in milliseconds

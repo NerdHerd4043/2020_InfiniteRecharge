@@ -40,14 +40,14 @@ public class Flywheel extends SubsystemBase {
 
     // PID Coefficients
     kP = 0.0003;
-    kI = 0.0001;
-    kD = 1;
-    kIz = 1e-1;
-    kFF = -0.00015;
+    kI = 0.01;
+    kD = 100;
+    kIz = 100;
+    kFF = -0.015;
     maxOutput = 1;
     minOutput = -1; 
     maxRPM = 10000;
-    setPoint = -5500;
+    setPoint = -6000;
 
     setPointAdj = 0;
 
@@ -74,6 +74,8 @@ public class Flywheel extends SubsystemBase {
     SmartDashboard.putNumber(dSetPoint, setPoint);
 
     SmartDashboard.putNumber("Flywheel Velocity", getFlywheelVelocity());
+
+    SmartDashboard.putNumber("Set Point Adjusted", getFlywheelSetPointAdjusted());
   }
 
   /**
@@ -120,9 +122,8 @@ public class Flywheel extends SubsystemBase {
   public double getFlywheelPos() { return encoder.getPosition(); }
   public double getFlywheelSetPoint() { return setPoint + setPointAdj; }
   public double getDefaultFlywheelSetPoint() { return setPoint; }
+  public double getFlywheelSetPointAdjusted() { return setPoint + setPointAdj; }
   public String getSetPointTag() { return dSetPoint; }
-
-  
 
   /**
    * @return the pidController
@@ -131,8 +132,14 @@ public class Flywheel extends SubsystemBase {
     return pidController;
   }
 
+  public void resetSetPointAdj() {
+    setPointAdj = 0;
+  }
+
   public void adjustSetPoint(double a) {
-    setPointAdj += a * 100;
+    setPointAdj += -a * 100;
+
+    SmartDashboard.putNumber("Set Point Adjusted", getFlywheelSetPointAdjusted());
   }
 
   @Override

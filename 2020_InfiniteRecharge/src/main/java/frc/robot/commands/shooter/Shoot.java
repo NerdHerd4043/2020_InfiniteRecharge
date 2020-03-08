@@ -10,7 +10,9 @@ package frc.robot.commands.shooter;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.ControlType;
 
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.Flywheel;
 
 public class Shoot extends CommandBase {
@@ -38,6 +40,8 @@ public class Shoot extends CommandBase {
     pidcontroller.setReference(shooter.getFlywheelSetPoint(), ControlType.kVelocity);
 
     System.out.println("Vel: " + shooter.getFlywheelVelocity());
+
+    shooter.adjustSetPoint(RobotContainer.getDriveStick().getTriggerAxis(Hand.kRight) - RobotContainer.getDriveStick().getTriggerAxis(Hand.kLeft));
   }
 
   // Called once the command ends or is interrupted.

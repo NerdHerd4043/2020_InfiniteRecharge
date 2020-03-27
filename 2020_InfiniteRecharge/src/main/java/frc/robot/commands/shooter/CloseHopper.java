@@ -5,23 +5,27 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.auto;
+package frc.robot.commands.shooter;
 
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Flywheel;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.subsystems.Kickup;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class DriveThenAuto extends SequentialCommandGroup {
-  /**
-   * Creates a new DriveThenAuto.
-   */
-  public DriveThenAuto(Drivetrain drivetrain, Flywheel shooter) {
-    // Add your commands in the super() call, e.g.
-    // super(new FooCommand(), new BarCommand());
-    super(new OffLineAuto(drivetrain),
-          new AutoShoot(shooter, () -> { return true; }));
+public class CloseHopper extends InstantCommand {
+  private Kickup flywheel;
+
+  public CloseHopper(Kickup kickup) {
+    this.flywheel = kickup;
+
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(this.flywheel);
+  }
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {
+    System.out.println("C%lose");
+    flywheel.setDoor(false);
   }
 }

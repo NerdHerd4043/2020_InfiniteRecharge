@@ -5,43 +5,38 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.climber;
-
-import java.util.function.DoubleSupplier;
+package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Feeder;
 
-public class ClimberUp extends CommandBase {
-  private Climber climber;
-
-  private DoubleSupplier winchSpeed;
+public class Feed extends CommandBase {
+  private Feeder feeder;
 
   /**
-   * Creates a new ClimberUp.
+   * Creates a new Feed.
    */
-  public ClimberUp(Climber climber, DoubleSupplier winchSpeed) {
-    this.climber = climber;
-    this.winchSpeed = winchSpeed;
+  public Feed(Feeder feeder) {
+    this.feeder = feeder;
 
-    addRequirements(this.climber);
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(this.feeder);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-     
-    climber.climberUp(winchSpeed.getAsDouble());
+    feeder.set(feeder.getFeederSpeed());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    feeder.stop();
   }
 
   // Returns true when the command should end.

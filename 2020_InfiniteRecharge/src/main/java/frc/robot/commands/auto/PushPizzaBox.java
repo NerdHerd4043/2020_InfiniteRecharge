@@ -5,38 +5,42 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.climber;
-
-import java.util.function.DoubleSupplier;
+package frc.robot.commands.auto;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Drivetrain;
 
-public class ClimberUp extends CommandBase {
-  private Climber climber;
+public class PushPizzaBox extends CommandBase {
+  private final Drivetrain drivetrain;
 
-  private DoubleSupplier winchSpeed;
+  private double goalRots;
+  private double leftOffset;
+  private double rightOffset;
 
   /**
-   * Creates a new ClimberUp.
+   * Creates a new PushPizzaBox.
    */
-  public ClimberUp(Climber climber, DoubleSupplier winchSpeed) {
-    this.climber = climber;
-    this.winchSpeed = winchSpeed;
+  public PushPizzaBox(Drivetrain drivetrain) {
+    this.drivetrain = drivetrain;
 
-    addRequirements(this.climber);
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(this.drivetrain);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    goalRots = this.drivetrain.DistanceToRots(-12);
+
+    leftOffset = drivetrain.getLeftRots();
+    rightOffset = drivetrain.getRightRots();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-     
-    climber.climberUp(winchSpeed.getAsDouble());
+    drivetrain.arcadeDrive(0.5, 0);
+    System.out.println("Left: " + (drivetrain.getLeftRots() - leftOffset) + " Right: " + (drivetrain.getRightRots() - rightOffset) + " Goal: " + goalRots);
   }
 
   // Called once the command ends or is interrupted.
@@ -47,6 +51,6 @@ public class ClimberUp extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return (drivetrain.getLeftRots() - leftOffset) <= goalRots && (drivetrain.getRightRots() - rightOffset) <= goalRots;
   }
 }

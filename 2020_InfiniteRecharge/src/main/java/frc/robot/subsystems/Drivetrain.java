@@ -8,8 +8,12 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.Rev2mDistanceSensor;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.Rev2mDistanceSensor.Port;
+import com.revrobotics.Rev2mDistanceSensor.RangeProfile;
+import com.revrobotics.Rev2mDistanceSensor.Unit;
 
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -26,6 +30,8 @@ public class Drivetrain extends SubsystemBase {
   private CANSparkMax backRightMotor = new CANSparkMax(DriveConstants.backRightMotorID, MotorType.kBrushless);
 
   private Solenoid shifter = new Solenoid(RobotConstants.PCMID, DriveConstants.shifterID);
+
+  private Rev2mDistanceSensor forwardSensor;
 
   /**
    * Creates a new Drivetrain.
@@ -46,12 +52,18 @@ public class Drivetrain extends SubsystemBase {
     frontLeftMotor.setIdleMode(IdleMode.kBrake);
     frontRightMotor.setIdleMode(IdleMode.kBrake);
 
-    setOpenLoopRampRate(DriveConstants.openLRRHigh);
+    shifter.set(false);
+    setOpenLoopRampRate();
 
     backLeftMotor.follow(frontLeftMotor);
     backRightMotor.follow(frontRightMotor);
 
     diffDrive = new DifferentialDrive(frontLeftMotor, frontRightMotor);
+
+    forwardSensor = new Rev2mDistanceSensor(Port.kOnboard);
+    forwardSensor.setRangeProfile(RangeProfile.kDefault);
+    forwardSensor.setDistanceUnits(Unit.kInches);
+    forwardSensor.setAutomaticMode(true);
   }
 
   /**
@@ -75,7 +87,11 @@ public class Drivetrain extends SubsystemBase {
   public void shift(boolean a) { 
     shifter.set(a); 
 
-    setOpenLoopRampRate((DriveConstants.Gears.highGear) ? DriveConstants.openLRRHigh : DriveConstants.openLRRLow);
+    setOpenLoopRampRate((DriveConstants.Gears.highGear != shifter.get()) ? DriveConstants.openLRRHigh : DriveConstants.openLRRLow);
+  }
+
+  public void setOpenLoopRampRate() {
+    setOpenLoopRampRate((DriveConstants.Gears.highGear != shifter.get()) ? DriveConstants.openLRRHigh : DriveConstants.openLRRLow);
   }
 
   /**
@@ -119,9 +135,9 @@ public class Drivetrain extends SubsystemBase {
    */
   public double RotsToDistance(double rots, boolean gear) { 
     if (gear == DriveConstants.Gears.highGear) 
-      return Math.PI * 6 * rots * DriveConstants.Ratios.highGear; 
+      return (Math.PI * 6 * rots) / DriveConstants.Ratios.highGear; 
     else 
-      return Math.PI * 6 * rots * DriveConstants.Ratios.lowGear; 
+      return (Math.PI * 6 * rots) / DriveConstants.Ratios.lowGear; 
   }
 
   /**
@@ -131,7 +147,6 @@ public class Drivetrain extends SubsystemBase {
    */
   public double DistanceToRots(double dist) { return DistanceToRots(dist, shifter.get()); }
 
-
   /**
    * @param dist desired travel distance in rotations
    * @param gear drivetrain gear
@@ -139,10 +154,14 @@ public class Drivetrain extends SubsystemBase {
    * @return estimated rotations required in the current gear
    */
   public double DistanceToRots(double dist, boolean gear) {
-    if (gear  == DriveConstants.Gears.highGear) 
-      return dist / Math.PI * 6 * DriveConstants.Ratios.highGear;
+    if (gear == DriveConstants.Gears.highGear) 
+      return (dist * DriveConstants.Ratios.highGear) / (Math.PI * 6);
     else
-      return dist / Math.PI * 6 * DriveConstants.Ratios.lowGear;
+      return (dist * DriveConstants.Ratios.lowGear) / (Math.PI * 6);
+  }
+
+  public Rev2mDistanceSensor getForwardSensor() {
+    return forwardSensor;
   }
 
   @Override

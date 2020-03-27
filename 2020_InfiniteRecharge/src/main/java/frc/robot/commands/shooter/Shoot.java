@@ -7,26 +7,24 @@
 
 package frc.robot.commands.shooter;
 
-import java.util.function.BooleanSupplier;
-
 import com.revrobotics.CANPIDController;
 import com.revrobotics.ControlType;
 
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Shooter;
+import frc.robot.RobotContainer;
+import frc.robot.subsystems.Flywheel;
 
 public class Shoot extends CommandBase {
-  private Shooter shooter;
+  private Flywheel shooter;
   private CANPIDController pidcontroller;
-  private BooleanSupplier shoot;
 
   /**
    * Creates a new Shoot.
    */
-  public Shoot(Shooter shooter, BooleanSupplier shoot) {
+  public Shoot(Flywheel shooter) {
     this.shooter = shooter;
     this.pidcontroller = this.shooter.getPidController();
-    this.shoot = shoot;
 
     addRequirements(this.shooter);
   }
@@ -40,19 +38,16 @@ public class Shoot extends CommandBase {
   @Override
   public void execute() {
     pidcontroller.setReference(shooter.getFlywheelSetPoint(), ControlType.kVelocity);
-    shooter.setConveyorMotor(shooter.getConveyorSpeed());
-
-    if(shoot.getAsBoolean()) { shooter.setLifterMotor(shooter.getLiftSpeed()); System.out.println("KICKING IT: " + shooter.getLiftSpeed()); } else {shooter.stopKickupMotor();} 
 
     System.out.println("Vel: " + shooter.getFlywheelVelocity());
+
+    shooter.adjustSetPoint(RobotContainer.getDriveStick().getTriggerAxis(Hand.kRight) - RobotContainer.getDriveStick().getTriggerAxis(Hand.kLeft));
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-      shooter.stopFlywheelMotor();
-      shooter.setConveyorMotor(0);
-      shooter.setLifterMotor(0);
+    shooter.stopFlywheelMotor();
   }
 
   // Returns true when the command should end.

@@ -7,7 +7,6 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
@@ -17,41 +16,44 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
 
-public class Shooter extends SubsystemBase {
+public class Flywheel extends SubsystemBase {
   private CANSparkMax flyWheelMotor = new CANSparkMax(ShooterConstants.flyWheelMotorID, MotorType.kBrushless);
-
-  private WPI_TalonSRX conveyorMotor = new WPI_TalonSRX(ShooterConstants.conveyorMotorID);
-  private WPI_TalonSRX lifterMotor = new WPI_TalonSRX(ShooterConstants.lifterMotorID);
 
   private CANPIDController pidController;
   private CANEncoder encoder;
 
+  private final String dSetPoint = "Set Point";
+
   // PID Variables
-  public double kP, kI, kD, kIz, kFF, maxOutput, minOutput, maxRPM, convSpd, liftSpd, setPoint;
+  public double kP, kI, kD, kIz, kFF, maxOutput, minOutput, maxRPM, feedSpd, kickSpd, setPoint;
+
+  public double setPointAdj;
 
   /**
    * Creates a new Shooter.
    */
-  public Shooter() {
+  public Flywheel() {
     flyWheelMotor.restoreFactoryDefaults();
 
     pidController = flyWheelMotor.getPIDController();
     encoder = flyWheelMotor.getEncoder();
 
     // PID Coefficients
-    kP = 6e-5;
-    kI = 1e-6;
-    kD = 1e-3;
-    kIz = 1e-1;
-    kFF = -0.000015;
+    kP = 0.0003;
+    kI = 0.01;
+    kD = 100;
+    kIz = 100;
+    kFF = -0.015;
     maxOutput = 1;
     minOutput = -1; 
-    maxRPM = 5700;
-    setPoint = -4500;
+    maxRPM = 10000;
+    setPoint = -6000;
+
+    setPointAdj = 0;
 
     // Motor Speeds
-    liftSpd = 0.8;
-    convSpd = -0.8;
+    kickSpd = 0.8;
+    feedSpd = -0.8;
 
     // set PID coeffecients
     pidController.setP(kP);
@@ -69,25 +71,11 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Max Output", maxOutput);
     SmartDashboard.putNumber("Min Output", minOutput);
 
-    SmartDashboard.putNumber("Set Point", setPoint);
-    SmartDashboard.putNumber("Conveyor Speed", convSpd);
-    SmartDashboard.putNumber("Lifter Speed", liftSpd);
+    SmartDashboard.putNumber(dSetPoint, setPoint);
 
     SmartDashboard.putNumber("Flywheel Velocity", getFlywheelVelocity());
-  }
 
-  /**
-   * @param a the power to set the conveyorMotor to
-   */
-  public void setConveyorMotor(double a) {
-    conveyorMotor.set(a);
-  }
-
-  /**
-   * @param a the power to set the lifterMotor to
-   */
-  public void setLifterMotor(double a) {
-    lifterMotor.set(a);
+    SmartDashboard.putNumber("Set Point Adjusted", getFlywheelSetPointAdjusted());
   }
 
   /**
@@ -95,13 +83,6 @@ public class Shooter extends SubsystemBase {
    */
   public void stopFlywheelMotor() {
     flyWheelMotor.stopMotor();
-  }
-
-  /**
-   * Stops the kickup motor
-   */
-  public void stopKickupMotor() {
-    lifterMotor.stopMotor();
   }
 
   /**
@@ -117,10 +98,7 @@ public class Shooter extends SubsystemBase {
     double max = SmartDashboard.getNumber("Max Output", 0);
     double min = SmartDashboard.getNumber("Min Output", 0);
 
-    double conv = SmartDashboard.getNumber("Conveyor Speed", 0);
-    double lift = SmartDashboard.getNumber("Lifter Speed", 0);
-
-    double dSetPoint = SmartDashboard.getNumber("Set Point", 0);
+    double newSetPoint = SmartDashboard.getNumber(dSetPoint, 0);
 
     double vel = SmartDashboard.getNumber("Flywheel Velocity", 0);
 
@@ -135,19 +113,17 @@ public class Shooter extends SubsystemBase {
       minOutput = min; maxOutput = max; 
     }
 
-    if((convSpd != conv)) { convSpd = conv; }
-    if((liftSpd != lift)) { liftSpd = lift; }
- 
-    if((dSetPoint != setPoint)) { setPoint = dSetPoint; }
+    if((newSetPoint != setPoint)) { setPoint = newSetPoint; }
 
     if(vel != getFlywheelVelocity()){ SmartDashboard.putNumber("Flywheel Velocity", getFlywheelVelocity()); }
   }
 
   public double getFlywheelVelocity() { return encoder.getVelocity(); }
   public double getFlywheelPos() { return encoder.getPosition(); }
-  public double getFlywheelSetPoint() { return setPoint; }
-  public double getLiftSpeed() { return liftSpd; }
-  public double getConveyorSpeed() { return convSpd; }
+  public double getFlywheelSetPoint() { return setPoint + setPointAdj; }
+  public double getDefaultFlywheelSetPoint() { return setPoint; }
+  public double getFlywheelSetPointAdjusted() { return setPoint + setPointAdj; }
+  public String getSetPointTag() { return dSetPoint; }
 
   /**
    * @return the pidController
@@ -156,10 +132,19 @@ public class Shooter extends SubsystemBase {
     return pidController;
   }
 
+  public void resetSetPointAdj() {
+    setPointAdj = 0;
+  }
+
+  public void adjustSetPoint(double a) {
+    setPointAdj += -a * 100;
+
+    SmartDashboard.putNumber("Set Point Adjusted", getFlywheelSetPointAdjusted());
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     updatePIDValues();
-
   }
 }

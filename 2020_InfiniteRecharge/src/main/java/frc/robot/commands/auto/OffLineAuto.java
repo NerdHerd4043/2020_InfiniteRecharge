@@ -14,7 +14,7 @@ import frc.robot.subsystems.Drivetrain;
 public class OffLineAuto extends CommandBase {
   private final Drivetrain drivetrain;
 
-  private double goalRots = 14;
+  private double goalRots;
   private double leftOffset;
   private double rightOffset;
 

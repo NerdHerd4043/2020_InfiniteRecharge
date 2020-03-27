@@ -25,10 +25,10 @@ public final class Constants {
         public static final int shifterID = 1;
 
         //Open Loop Ramp Rate for low gear
-        public static final double openLRRLow = 0.254;
+        public static final double openLRRLow = 0.1;
 
         //Open Loop Ramp Rate for High gear
-        public static final double openLRRHigh = 0.3;
+        public static final double openLRRHigh = 0.4;
 
 
         public static final class Gears {
@@ -52,8 +52,10 @@ public final class Constants {
     public static final class ShooterConstants {
         public static final int flyWheelMotorID = 5;
 
-        public static final int conveyorMotorID = 4;
+        public static final int conveyorMotorID = 6;
         public static final int lifterMotorID = 5;
+
+        public static final int hopperSolonoidId = 7;
 
     }
 

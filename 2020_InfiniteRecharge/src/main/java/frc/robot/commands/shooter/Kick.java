@@ -5,43 +5,47 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.climber;
+package frc.robot.commands.shooter;
 
-import java.util.function.DoubleSupplier;
-
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Kickup;
 
-public class ClimberUp extends CommandBase {
-  private Climber climber;
+public class Kick extends CommandBase {
+  private Kickup kickup;
 
-  private DoubleSupplier winchSpeed;
 
+  double startTime;
   /**
-   * Creates a new ClimberUp.
+   * Creates a new Kick.
    */
-  public ClimberUp(Climber climber, DoubleSupplier winchSpeed) {
-    this.climber = climber;
-    this.winchSpeed = winchSpeed;
+  public Kick(Kickup kickup) {
+    this.kickup = kickup;
 
-    addRequirements(this.climber);
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(this.kickup);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    startTime = Timer.getFPGATimestamp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-     
-    climber.climberUp(winchSpeed.getAsDouble());
+    // if(Timer.getFPGATimestamp() < startTime + 0.1) {
+    //   kickup.set(-kickup.getKickSpeed());
+    // } else {
+      kickup.set(kickup.getKickSpeed());
+    // }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    kickup.stop();
   }
 
   // Returns true when the command should end.

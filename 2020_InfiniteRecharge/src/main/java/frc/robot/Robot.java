@@ -136,6 +136,8 @@ public class Robot extends TimedRobot {
                   .setAutomaticMode(true);
   }
 
+  // This is a comment, please ignore.
+
   /**
    * This function is called periodically during test mode.
    */

@@ -8,8 +8,7 @@
 package frc.robot.commands.auto;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Flywheel;
+import frc.robot.subsystems.*;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -18,10 +17,10 @@ public class DriveThenAuto extends SequentialCommandGroup {
   /**
    * Creates a new DriveThenAuto.
    */
-  public DriveThenAuto(Drivetrain drivetrain, Flywheel shooter) {
+  public DriveThenAuto(Drivetrain drivetrain, Flywheel shooter, Kickup kickup, Feeder feeder) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(new OffLineAuto(drivetrain),
-          new AutoShoot(shooter, () -> { return true; }));
+          new AutoShoot(shooter, kickup, feeder, () -> { return true; }));
   }
 }

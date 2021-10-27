@@ -28,7 +28,7 @@ public final class Constants {
         public static final double openLRRLow = 0.1;
 
         //Open Loop Ramp Rate for High gear
-        public static final double openLRRHigh = 0.4;
+        public static final double openLRRHigh = 0.2;
 
 
         public static final class Gears {

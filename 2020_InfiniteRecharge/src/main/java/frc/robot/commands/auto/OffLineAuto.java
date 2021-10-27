@@ -34,6 +34,7 @@ public class OffLineAuto extends CommandBase {
     leftOffset = drivetrain.getLeftRots();
     rightOffset = drivetrain.getRightRots();
 
+    goalRots = drivetrain.DistanceToRots( 84);
     // drivetrain.shift(DriveConstants.lowGear);
   }
 

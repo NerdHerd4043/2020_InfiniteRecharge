@@ -17,15 +17,15 @@ public class ReverseShooter extends InstantCommand {
   Flywheel flywheel;
   Feeder feeder;
 
-  public ReverseShooter(Kickup kickup, Flywheel flywheel, Feeder feeder) {
-    this.kickup = kickup;
+  public ReverseShooter(/*Kickup kickup,*/ Flywheel flywheel/*, Feeder feeder*/) {
+    // this.kickup = kickup;
     this.flywheel = flywheel;
-    this.feeder = feeder;
+    // this.feeder = feeder;
 
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(this.kickup);
+    // addRequirements(this.kickup);
     addRequirements(this.flywheel);
-    addRequirements(this.feeder);
+    // addRequirements(this.feeder);
   }
 
   // Called when the command is initially scheduled.

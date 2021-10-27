@@ -52,9 +52,6 @@ public class Drivetrain extends SubsystemBase {
     frontLeftMotor.setIdleMode(IdleMode.kBrake);
     frontRightMotor.setIdleMode(IdleMode.kBrake);
 
-    shifter.set(false);
-    setOpenLoopRampRate();
-
     backLeftMotor.follow(frontLeftMotor);
     backRightMotor.follow(frontRightMotor);
 
@@ -64,6 +61,8 @@ public class Drivetrain extends SubsystemBase {
     forwardSensor.setRangeProfile(RangeProfile.kDefault);
     forwardSensor.setDistanceUnits(Unit.kInches);
     forwardSensor.setAutomaticMode(true);
+
+    shift(DriveConstants.Gears.highGear);
   }
 
   /**
@@ -87,7 +86,7 @@ public class Drivetrain extends SubsystemBase {
   public void shift(boolean a) { 
     shifter.set(a); 
 
-    setOpenLoopRampRate((DriveConstants.Gears.highGear != shifter.get()) ? DriveConstants.openLRRHigh : DriveConstants.openLRRLow);
+    setOpenLoopRampRate();
   }
 
   public void setOpenLoopRampRate() {

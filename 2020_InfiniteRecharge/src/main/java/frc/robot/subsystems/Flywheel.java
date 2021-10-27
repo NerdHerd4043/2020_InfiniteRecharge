@@ -34,6 +34,8 @@ public class Flywheel extends SubsystemBase {
    */
   public Flywheel() {
     flyWheelMotor.restoreFactoryDefaults();
+// 
+    // flyWheelMotor.setSmartCurrentLimit(5);
 
     pidController = flyWheelMotor.getPIDController();
     encoder = flyWheelMotor.getEncoder();
@@ -84,6 +86,10 @@ public class Flywheel extends SubsystemBase {
   public void stopFlywheelMotor() {
     flyWheelMotor.stopMotor();
   }
+
+  // public void reverseMotor() {
+  //   pidController.setSe
+  // }
 
   /**
    * takes all values from SmartDashboard, and refreshes the code values

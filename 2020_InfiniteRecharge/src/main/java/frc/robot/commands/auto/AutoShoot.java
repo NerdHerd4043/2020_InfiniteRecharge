@@ -14,10 +14,12 @@ import com.revrobotics.ControlType;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Flywheel;
+import frc.robot.subsystems.*;
 
 public class AutoShoot extends CommandBase {
   private final Flywheel shooter;
+  private final Kickup kickup;
+  private final Feeder feeder;
   private CANPIDController pidcontroller;
   private BooleanSupplier shoot;
 
@@ -26,8 +28,10 @@ public class AutoShoot extends CommandBase {
   /**
    * Creates a new AutoShoot.
    */
-  public AutoShoot(Flywheel shooter, BooleanSupplier shoot) {
+  public AutoShoot(Flywheel shooter, Kickup kickup, Feeder feeder, BooleanSupplier shoot) {
     this.shooter = shooter;
+    this.kickup = kickup;
+    this.feeder = feeder;
     this.pidcontroller = this.shooter.getPidController();
     this.shoot = shoot;
 
@@ -44,7 +48,17 @@ public class AutoShoot extends CommandBase {
   @Override
   public void execute() {
     // System.out.println("KICKING IT: " + shooter.getLiftSpeed());
-    if(shoot.getAsBoolean()) { pidcontroller.setReference(shooter.getFlywheelSetPoint(), ControlType.kVelocity); } else { shooter.stopFlywheelMotor(); } 
+    if(shoot.getAsBoolean()) { 
+      pidcontroller.setReference(shooter.getFlywheelSetPoint(), ControlType.kVelocity); 
+      if(Timer.getFPGATimestamp() >= startTime + 1) {
+        kickup.set(kickup.getKickSpeed()); 
+        feeder.set(feeder.getFeederSpeed());
+      }
+    } else { 
+      shooter.stopFlywheelMotor(); 
+      kickup.stop();
+      feeder.stop();
+    } 
 
 
     System.out.println("Vel: " + shooter.getFlywheelVelocity());
@@ -54,6 +68,8 @@ public class AutoShoot extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     shooter.stopFlywheelMotor();
+    kickup.stop();
+    feeder.stop();
   }
 
   // Returns true when the command should end.

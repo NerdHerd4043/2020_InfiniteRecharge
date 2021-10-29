@@ -60,12 +60,12 @@ public class Climber extends SubsystemBase {
   }
 
   /**
-   * Stop Motor and hold closed during the match
+   * Hopefully doesn't stop motor and holds arms closed during the match
    */
   public void climberRest() {
     climberPiston.set(false);
     // setBrakeMode(true);
-    winchMotorF.stopMotor();
+    // winchMotorF.stopMotor();
     this.setResting(true);
     this.setUp(false);
   }

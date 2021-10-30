@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
 // import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.commands.drivetrain.*;
 import frc.robot.commands.shooter.*;
@@ -38,6 +39,9 @@ public class RobotContainer {
   private final Kickup kickup = new Kickup();
 
   private final Command autoCommand = new DriveThenAuto(drivetrain, flywheel, kickup, feeder);
+  private final Command noShootAuto = new OfflineAuto(drivetrain);
+
+  SendableChooser<Command> commandChooser = new SendableChooser<>();
 
   private static AHRS navxAhrs = new AHRS(SPI.Port.kMXP);
 
@@ -57,6 +61,11 @@ public class RobotContainer {
           drivetrain,
           () -> driveStick.getY(GenericHID.Hand.kLeft),
           () -> driveStick.getX(GenericHID.Hand.kRight)));
+
+    commandChooser.setDefaultOption("No Shoot Auto", noShootAuto);
+    commandChooser.addOption("DANGER: Shoot Auto", autoCommand);
+
+    SmartDashboard.putData(commandChooser);
   }
 
   /**
@@ -94,7 +103,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return autoCommand;
+    return commandChooser.getSelected();
   }
 
   /**
